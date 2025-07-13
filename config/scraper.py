@@ -7,23 +7,20 @@ Extrai informações da tabela nutricional e cria um DataFrame
 
 import sys
 sys.path.append('.')
-from config.browser import get_browser_driver
 import requests
 import pandas as pd
 from bs4 import BeautifulSoup
 import re
 import logging
+import json
 from typing import Dict, Optional, List
 from datetime import datetime
 import os
 
 
 class PerdigaoScraper:
-    def __init__(self, browser_preference: Optional[str] = None, headless: bool = True):
-        """Inicializa o scraper com Selenium/browser.py"""
-        self.browser_preference = browser_preference
-        self.headless = headless
-        self.driver = None
+    def __init__(self):
+        """Inicializa o scraper com requests"""
         self.setup_logging()
         
         # Headers para simular navegador
@@ -61,18 +58,16 @@ class PerdigaoScraper:
     
     def get_page_content(self, url: str) -> Optional[BeautifulSoup]:
         """
-        Usa Selenium/browser.py para obter o HTML renderizado da página
+        Usa requests para obter o HTML da página
         """
         try:
-            if self.driver is None:
-                self.driver, _ = get_browser_driver(self.browser_preference, self.headless)
-            self.logger.info(f"Abrindo página com Selenium: {url}")
-            self.driver.get(url)
-            html = self.driver.page_source
-            soup = BeautifulSoup(html, 'html.parser')
+            self.logger.info(f"Acessando página: {url}")
+            response = requests.get(url, headers=self.headers, timeout=10)
+            response.raise_for_status()
+            soup = BeautifulSoup(response.content, 'html.parser')
             return soup
         except Exception as e:
-            self.logger.error(f"Erro ao carregar página com Selenium: {e}")
+            self.logger.error(f"Erro ao carregar página: {e}")
             return None
     
     def extract_product_name(self, soup: BeautifulSoup) -> str:
@@ -94,18 +89,7 @@ class PerdigaoScraper:
             self.logger.error(f"Erro ao extrair nome do produto: {e}")
             return "Nome não encontrado"
     
-    def extract_category_from_url(self, url: str) -> str:
-        """Extrai a categoria do produto da URL"""
-        try:
-            # Exemplo: /produtos/empanados/todos-os-empanados/mini-chicken-tradicional-275g/
-            # Categoria seria "empanados"
-            parts = url.split('/')
-            if len(parts) >= 4 and parts[2] == 'produtos':
-                return parts[3].title()
-            return "Categoria não identificada"
-        except Exception as e:
-            self.logger.error(f"Erro ao extrair categoria da URL: {e}")
-            return "Categoria não identificada"
+
     
     def extract_porcao(self, soup: BeautifulSoup) -> str:
         """Extrai a porção da tabela nutricional"""
@@ -207,7 +191,6 @@ class PerdigaoScraper:
         
         # Extrair dados básicos
         product_name = self.extract_product_name(soup)
-        category = self.extract_category_from_url(url)
         porcao = self.extract_porcao(soup)
         
         # Extrair dados nutricionais
@@ -217,7 +200,6 @@ class PerdigaoScraper:
         product_data = {
             'NOME_PRODUTO': product_name,
             'URL': url,
-            'CATEGORIA': category,
             'PORCAO (g)': porcao.replace('g', ''),  # Remover 'g' da porção
         }
         
@@ -267,7 +249,7 @@ class PerdigaoScraper:
         
         # Ordenar colunas na ordem especificada
         column_order = [
-            'NOME_PRODUTO', 'URL', 'CATEGORIA', 'PORCAO (g)',
+            'NOME_PRODUTO', 'URL', 'PORCAO (g)',
             'CALORIAS (kcal)', 'CARBOIDRATOS (g)', 'PROTEINAS (g)',
             'GORDURAS_TOTAIS (g)', 'GORDURAS_SATURADAS (g)', 'FIBRAS (g)',
             'ACUCARES (g)', 'SODIO (mg)'
@@ -320,32 +302,49 @@ def main():
     """Função principal para teste"""
     scraper = PerdigaoScraper()
     
-    # Lista de URLs para coletar
-    urls = [
-        "https://www.perdigao.com.br/produtos/empanados/todos-os-empanados/mini-chicken-tradicional-275g/",
-        "https://www.perdigao.com.br/produtos/empanados/todos-os-empanados/steak-recheado-100g/",
-        "https://www.perdigao.com.br/produtos/salsichas/todas-as-salsichas/salsicha-de-frango-500g/"
-    ]
+    # Caminho para o arquivo JSON com as URLs
+    json_file = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'dados', 'product_urls.json')
     
     print("🦆 SCRAPER PERDIGÃO - DADOS NUTRICIONAIS")
     print("=" * 50)
+    
+    # Verificar se o arquivo JSON existe
+    if not os.path.exists(json_file):
+        print(f"❌ Arquivo não encontrado: {json_file}")
+        print("Execute primeiro o url_collector.py para gerar a lista de URLs")
+        return
+    
+    # Carregar URLs do JSON
+    try:
+        with open(json_file, 'r', encoding='utf-8') as f:
+            urls = json.load(f)
+        print(f"📋 Carregadas {len(urls)} URLs do arquivo: {json_file}")
+    except Exception as e:
+        print(f"❌ Erro ao carregar URLs do JSON: {e}")
+        return
+    
+    if not urls:
+        print("❌ Nenhuma URL encontrada no arquivo JSON")
+        return
     
     # Fazer scraping de todos os produtos
     df = scraper.scrape_products(urls)
     
     if not df.empty:
         print("\n✅ Dados extraídos com sucesso!")
-        print("\n📊 Dados dos produtos:")
-        print(df)
-        filepath = scraper.save_dataframe(df, "produtos_teste.csv")
+        print(f"\n📊 Total de produtos processados: {len(df)}")
+        
+        # Salvar com timestamp
+        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+        filename = f"produtos_perdigao_{timestamp}.csv"
+        filepath = scraper.save_dataframe(df, filename)
+        
         if filepath:
             print(f"\n💾 Arquivo salvo em: {filepath}")
         else:
             print("\n❌ Erro ao salvar arquivo")
     else:
         print("\n❌ Falha ao extrair dados dos produtos")
-
-    scraper.close()
 
 
 if __name__ == "__main__":
