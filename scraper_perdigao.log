@@ -1,0 +1,38 @@
+2025-07-12 21:48:49,707 - INFO - Iniciando scraping do produto: https://www.perdigao.com.br/produtos/empanados/todos-os-empanados/mini-chicken-tradicional-275g/
+2025-07-12 21:48:49,707 - INFO - Fazendo requisição para: https://www.perdigao.com.br/produtos/empanados/todos-os-empanados/mini-chicken-tradicional-275g/
+2025-07-12 21:48:49,889 - INFO - Página carregada com sucesso: 52138 bytes
+2025-07-12 21:48:49,893 - INFO - Scraping concluído para: Mini Chicken Tradicional 275g
+2025-07-12 21:48:49,897 - INFO - DataFrame salvo em: /home/sidnei/Documentos/GitHub/scraping_perdigao/dados/teste_produto.csv
+2025-07-12 21:48:49,897 - INFO - Total de produtos: 1
+2025-07-12 21:52:14,554 - INFO - Iniciando scraping do produto: https://www.perdigao.com.br/produtos/empanados/todos-os-empanados/mini-chicken-tradicional-275g/
+2025-07-12 21:52:14,555 - INFO - Fazendo requisição para: https://www.perdigao.com.br/produtos/empanados/todos-os-empanados/mini-chicken-tradicional-275g/
+2025-07-12 21:52:14,809 - INFO - Página carregada com sucesso: 52138 bytes
+2025-07-12 21:52:14,815 - INFO - Scraping concluído para: Mini Chicken Tradicional 275g
+2025-07-12 21:52:14,819 - INFO - DataFrame salvo em: /home/sidnei/Documentos/GitHub/scraping_perdigao/dados/teste_produto.csv
+2025-07-12 21:52:14,819 - INFO - Total de produtos: 1
+2025-07-12 21:52:45,342 - INFO - Iniciando scraping do produto: https://www.perdigao.com.br/produtos/empanados/todos-os-empanados/steak-recheado-100g/
+2025-07-12 21:52:45,342 - INFO - Fazendo requisição para: https://www.perdigao.com.br/produtos/empanados/todos-os-empanados/steak-recheado-100g/
+2025-07-12 21:52:45,476 - INFO - Página carregada com sucesso: 51998 bytes
+2025-07-12 21:52:45,479 - WARNING - Campo CALORIAS (kcal) não encontrado, definindo como 0
+2025-07-12 21:52:45,479 - WARNING - Campo ACUCARES (g) não encontrado, definindo como 0
+2025-07-12 21:52:45,479 - INFO - Scraping concluído para: Steak recheado 100g
+2025-07-12 21:52:45,484 - INFO - DataFrame salvo em: /home/sidnei/Documentos/GitHub/scraping_perdigao/dados/teste_produto.csv
+2025-07-12 21:52:45,484 - INFO - Total de produtos: 1
+2025-07-12 22:00:30,185 - INFO - Processando produto 1/3
+2025-07-12 22:00:30,185 - INFO - Iniciando scraping do produto: https://www.perdigao.com.br/produtos/empanados/todos-os-empanados/mini-chicken-tradicional-275g/
+2025-07-12 22:00:30,186 - INFO - Fazendo requisição para: https://www.perdigao.com.br/produtos/empanados/todos-os-empanados/mini-chicken-tradicional-275g/
+2025-07-12 22:00:30,562 - INFO - Página carregada com sucesso: 52138 bytes
+2025-07-12 22:00:30,567 - INFO - Scraping concluído para: Mini Chicken Tradicional 275g
+2025-07-12 22:00:30,567 - INFO - Processando produto 2/3
+2025-07-12 22:00:30,567 - INFO - Iniciando scraping do produto: https://www.perdigao.com.br/produtos/empanados/todos-os-empanados/steak-recheado-100g/
+2025-07-12 22:00:30,568 - INFO - Fazendo requisição para: https://www.perdigao.com.br/produtos/empanados/todos-os-empanados/steak-recheado-100g/
+2025-07-12 22:00:30,625 - INFO - Página carregada com sucesso: 52132 bytes
+2025-07-12 22:00:30,628 - WARNING - Campo ACUCARES (g) não encontrado, definindo como 0
+2025-07-12 22:00:30,628 - INFO - Scraping concluído para: Steak recheado 100g
+2025-07-12 22:00:30,628 - INFO - Processando produto 3/3
+2025-07-12 22:00:30,629 - INFO - Iniciando scraping do produto: https://www.perdigao.com.br/produtos/salsichas/todas-as-salsichas/salsicha-de-frango-500g/
+2025-07-12 22:00:30,629 - INFO - Fazendo requisição para: https://www.perdigao.com.br/produtos/salsichas/todas-as-salsichas/salsicha-de-frango-500g/
+2025-07-12 22:00:30,683 - INFO - Página carregada com sucesso: 53353 bytes
+2025-07-12 22:00:30,686 - INFO - Scraping concluído para: Salsicha de Frango 500g
+2025-07-12 22:00:30,710 - INFO - DataFrame salvo em: /home/sidnei/Documentos/GitHub/scraping_perdigao/dados/produtos_teste.csv
+2025-07-12 22:00:30,710 - INFO - Total de produtos: 3
